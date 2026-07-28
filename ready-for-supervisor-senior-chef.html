@@ -1023,9 +1023,21 @@ const GOOGLE_FORM = {
       addHiddenField(submissionForm, GOOGLE_FORM.fields.site, document.getElementById("site").value);
       addHiddenField(submissionForm, GOOGLE_FORM.fields.assessor, document.getElementById("assessor").value);
       addHiddenField(submissionForm, GOOGLE_FORM.fields.assessmentDate, document.getElementById("assessmentDate").value);
-      addHiddenField(submissionForm, GOOGLE_FORM.fields.scoresJson, JSON.stringify(outcome.scores));
-      addHiddenField(submissionForm, GOOGLE_FORM.fields.evidenceJson, JSON.stringify(outcome.evidence));
-      addHiddenField(submissionForm, GOOGLE_FORM.fields.practicalTasksJson, JSON.stringify(outcome.tasks));
+// Behaviour scores
+outcome.scores.forEach((score, index) => {
+    const field = GOOGLE_FORM.fields.behaviourScores[index];
+    if(field){
+        addHiddenField(submissionForm, field, score);
+    }
+});
+
+// Behaviour evidence
+outcome.evidence.forEach((evidence, index) => {
+    const field = GOOGLE_FORM.fields.behaviourEvidence[index];
+    if(field){
+        addHiddenField(submissionForm, field, evidence);
+    }
+});
       addHiddenField(submissionForm, GOOGLE_FORM.fields.average, outcome.average.toFixed(2));
       addHiddenField(submissionForm, GOOGLE_FORM.fields.lowestScore, String(outcome.lowest));
       addHiddenField(submissionForm, GOOGLE_FORM.fields.readinessResult, outcome.result);
