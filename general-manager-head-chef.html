@@ -822,25 +822,46 @@
       }
     ];
 
-    const GOOGLE_FORM = {
-      actionUrl: "",
-      fields: {
-        teamMember: "",
-        currentRole: "",
-        targetRole: "",
-        site: "",
-        assessor: "",
-        assessmentDate: "",
-        scoresJson: "",
-        evidenceJson: "",
-        practicalTasksJson: "",
-        average: "",
-        lowestScore: "",
-        readinessResult: "",
-        overallNotes: ""
-      }
-    };
+const GOOGLE_FORM = {
+    actionUrl: "https://docs.google.com/forms/d/e/1FAIpQLSfqfdl5DS2RiQyDynx-PRwrxny9ym0W7F-GrmvLXqga1O8Ung/formResponse",
 
+    fields: {
+        teamMember: "entry.859709684",
+        currentRole: "entry.1743496873",
+        targetRole: "entry.1050404049",
+        assessmentType: "entry.1702940846",
+        site: "entry.2058673514",
+        assessor: "entry.1334060054",
+        assessmentDate: "entry.1256799209",
+
+        overallNotes: "entry.1206780747",
+        average: "entry.1014178655",
+        lowestScore: "entry.967295944",
+        readinessResult: "entry.1191249140",
+
+        behaviourScores: [
+            "entry.64841442",
+            "entry.1831921643",
+            "entry.1547516649",
+            "entry.832966112",
+            "entry.1245220243",
+            "entry.1451215273",
+            "entry.870406047",
+            "entry.2137157427"
+        ],
+
+        behaviourEvidence: [
+            "entry.1149304956",
+            "entry.1637814475",
+            "entry.2048987399",
+            "entry.1529120532",
+            "entry.542041193",
+            "entry.1180489029",
+            "entry.1961323288",
+            "entry.736134007"
+        ]
+    }
+};
     function buildBehaviours(){
       const container = document.getElementById("behavioursContainer");
 
