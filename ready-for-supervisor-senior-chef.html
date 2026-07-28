@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ready for Supervisor / Senior Chef</title>
+
+  <style>
+    :root{
+      --dark-green:#00572E;
+      --bright-green:#00CC00;
+      --cream:#F5F0E8;
+      --white:#FFFFFF;
+      --ink:#1A1A1A;
+      --mist:#E8E4DC;
+      --fog:#777777;
+      --red:#D93025;
+      --orange:#F28C28;
+      --blue:#66CCFF;
+      --shadow:0 8px 24px rgba(0,0,0,.12);
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--dark-green);
+      background:
+        linear-gradient(rgba(0,87,46,.88),rgba(0,87,46,.88)),
+        url("background.jpg") center/cover fixed no-repeat;
+    }
+
+    button,input,textarea,select{font:inherit}
+
+    .page-shell{
+      width:min(980px,100%);
+      margin:0 auto;
+      background:var(--cream);
+      min-height:100vh;
+      box-shadow:0 0 30px rgba(0,0,0,.18);
+    }
+
+    .hero{
+      padding:28px 22px 24px;
+      text-align:center;
+      background:var(--dark-green);
+      color:var(--white);
+    }
+
+    .main-logo{
+      width:min(190px,52vw);
+      max-height:110px;
+      object-fit:contain;
+      margin-bottom:14px;
+    }
+
+    .eyebrow{
+      color:var(--bright-green);
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:2px;
+      font-size:.75rem;
+      margin-bottom:8px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(1.8rem,5vw,3.1rem);
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:-1px;
+    }
+
+    .subtitle{
+      margin:10px auto 0;
+      color:#C8E4D2;
+      font-size:1rem;
+      max-width:650px;
+    }
+
+    .content{
+      padding:18px;
+    }
+
+    .card{
+      background:var(--white);
+      border:2px solid var(--mist);
+      border-radius:16px;
+      padding:18px;
+      margin-bottom:16px;
+      box-shadow:0 2px 7px rgba(0,0,0,.04);
+    }
+
+    .card-title{
+      margin:0 0 12px;
+      color:var(--dark-green);
+      font-size:1rem;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      font-weight:900;
+    }
+
+    .intro-copy{
+      margin:0;
+      line-height:1.65;
+      color:var(--ink);
+      font-size:.96rem;
+    }
+
+    .readiness-list{
+      margin:14px 0 0;
+      padding-left:20px;
+      color:var(--ink);
+      line-height:1.7;
+    }
+
+    .values-row{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:8px;
+      align-items:start;
+    }
+
+    .value-item{
+      text-align:center;
+      min-width:0;
+    }
+
+    .value-item img{
+      width:100%;
+      max-width:78px;
+      aspect-ratio:1/1;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 6px;
+      border-radius:10px;
+      background:var(--cream);
+      border:1px solid var(--mist);
+      padding:4px;
+    }
+
+    .value-item span{
+      display:block;
+      color:var(--dark-green);
+      font-weight:900;
+      font-size:clamp(.62rem,2.2vw,.8rem);
+      line-height:1.1;
+    }
+
+    .details-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    label{
+      color:var(--dark-green);
+      font-weight:900;
+      font-size:.82rem;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:2px solid var(--mist);
+      border-radius:9px;
+      padding:11px 12px;
+      background:#FFFDF9;
+      color:var(--ink);
+      outline:none;
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--bright-green);
+      box-shadow:0 0 0 3px rgba(0,204,0,.12);
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:90px;
+      line-height:1.5;
+    }
+
+    .behaviour-card{
+      border-left:7px solid var(--dark-green);
+      padding:0;
+      overflow:hidden;
+    }
+
+    .behaviour-head{
+      padding:16px 18px;
+      background:#FFFDF9;
+      border-bottom:1px solid var(--mist);
+    }
+
+    .behaviour-number{
+      display:inline-flex;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      align-items:center;
+      justify-content:center;
+      background:var(--dark-green);
+      color:var(--white);
+      font-weight:900;
+      margin-right:8px;
+    }
+
+    .behaviour-title{
+      display:inline;
+      margin:0;
+      font-size:1.18rem;
+      color:var(--dark-green);
+    }
+
+    .behaviour-description{
+      margin:10px 0 0;
+      color:var(--ink);
+      line-height:1.55;
+      font-size:.94rem;
+    }
+
+    .great-box{
+      margin:14px 18px 0;
+      padding:14px;
+      background:#EEF7F1;
+      border:1px solid #CDE8D6;
+      border-radius:10px;
+      color:var(--ink);
+    }
+
+    .great-box h3{
+      margin:0 0 7px;
+      font-size:.84rem;
+      color:var(--dark-green);
+      text-transform:uppercase;
+      letter-spacing:.7px;
+    }
+
+    .great-box p{
+      margin:0 0 8px;
+      line-height:1.5;
+      font-size:.91rem;
+    }
+
+    .great-box ul{
+      margin:0;
+      padding-left:18px;
+      line-height:1.55;
+      font-size:.89rem;
+    }
+
+    .score-section{
+      padding:16px 18px 0;
+    }
+
+    .score-label{
+      margin-bottom:8px;
+      font-size:.8rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.8px;
+    }
+
+    .score-options{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:7px;
+    }
+
+    .score-option input{
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .score-option label{
+      min-height:72px;
+      cursor:pointer;
+      border:2px solid var(--mist);
+      border-radius:10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      padding:7px 3px;
+      background:var(--white);
+      text-align:center;
+      transition:.15s ease;
+    }
+
+    .score-option label strong{
+      font-size:1.25rem;
+      line-height:1;
+      margin-bottom:5px;
+    }
+
+    .score-option label span{
+      color:var(--fog);
+      font-size:.66rem;
+      line-height:1.05;
+      font-weight:800;
+    }
+
+    .score-option input:checked + label{
+      transform:translateY(-2px);
+      box-shadow:0 5px 12px rgba(0,0,0,.12);
+      color:var(--white);
+    }
+
+    .score-option[data-score="1"] input:checked + label{background:var(--red);border-color:var(--red)}
+    .score-option[data-score="2"] input:checked + label{background:var(--orange);border-color:var(--orange)}
+    .score-option[data-score="3"] input:checked + label{background:var(--blue);border-color:var(--blue);color:var(--dark-green)}
+    .score-option[data-score="4"] input:checked + label{background:var(--bright-green);border-color:var(--bright-green);color:var(--dark-green)}
+    .score-option[data-score="5"] input:checked + label{background:var(--dark-green);border-color:var(--dark-green)}
+
+    .score-option input:checked + label span{
+      color:inherit;
+    }
+
+    .evidence-wrap{
+      padding:16px 18px 18px;
+    }
+
+    .evidence-prompt{
+      margin:0 0 7px;
+      color:var(--fog);
+      font-size:.82rem;
+      line-height:1.4;
+    }
+
+    .tasks{
+      display:grid;
+      gap:10px;
+    }
+
+    .task{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border:2px solid var(--mist);
+      border-radius:10px;
+      background:#FFFDF9;
+    }
+
+    .task input{
+      width:20px;
+      height:20px;
+      accent-color:var(--dark-green);
+      flex:0 0 auto;
+      margin-top:1px;
+    }
+
+    .task label{
+      color:var(--ink);
+      font-size:.95rem;
+      line-height:1.35;
+      cursor:pointer;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .summary-stat{
+      padding:12px 8px;
+      text-align:center;
+      border-radius:10px;
+      background:var(--cream);
+    }
+
+    .summary-stat strong{
+      display:block;
+      font-size:1.35rem;
+      color:var(--dark-green);
+    }
+
+    .summary-stat span{
+      display:block;
+      font-size:.7rem;
+      color:var(--fog);
+      margin-top:3px;
+    }
+
+    .outcome{
+      margin-top:14px;
+      border-radius:12px;
+      padding:15px;
+      background:var(--dark-green);
+      color:var(--white);
+    }
+
+    .outcome.ready{background:var(--bright-green);color:var(--dark-green)}
+    .outcome.development{background:var(--red)}
+    .outcome.nearly{background:var(--orange)}
+    .outcome.incomplete{background:var(--dark-green)}
+
+    .outcome strong{
+      display:block;
+      font-size:1.05rem;
+      margin-bottom:4px;
+    }
+
+    .outcome span{
+      font-size:.87rem;
+      line-height:1.4;
+    }
+
+    .actions{
+      position:sticky;
+      bottom:0;
+      z-index:20;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      padding:12px 18px;
+      background:rgba(245,240,232,.96);
+      backdrop-filter:blur(8px);
+      border-top:2px solid var(--mist);
+    }
+
+    .btn{
+      border:0;
+      border-radius:10px;
+      padding:13px 10px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--bright-green);color:var(--dark-green)}
+    .btn-secondary{background:var(--dark-green);color:var(--white)}
+    .btn-muted{background:var(--mist);color:var(--dark-green)}
+
+    .small-note{
+      margin-top:10px;
+      color:var(--fog);
+      font-size:.76rem;
+      line-height:1.4;
+    }
+
+    .validation-message{
+      margin-top:10px;
+      font-size:.82rem;
+      font-weight:800;
+      color:var(--red);
+      display:none;
+    }
+
+    .submission-status{
+      margin:10px 0 0;
+      font-size:.82rem;
+      font-weight:800;
+    }
+
+    @media (max-width:700px){
+      .content{padding:12px}
+      .card{padding:14px}
+      .details-grid{grid-template-columns:1fr}
+      .score-options{gap:4px}
+      .score-option label{min-height:65px;padding:5px 2px}
+      .score-option label span{font-size:.57rem}
+      .summary-grid{grid-template-columns:repeat(2,1fr)}
+      .actions{grid-template-columns:1fr}
+      .value-item img{max-width:62px}
+    }
+
+    @media print{
+      body{
+        background:var(--white);
+      }
+
+      .page-shell{
+        width:100%;
+        box-shadow:none;
+      }
+
+      .actions,.no-print{
+        display:none !important;
+      }
+
+      .hero{
+        padding:18px;
+      }
+
+      .content{
+        padding:10px;
+      }
+
+      .card{
+        break-inside:avoid;
+        box-shadow:none;
+        margin-bottom:10px;
+      }
+
+      .behaviour-card{
+        break-inside:avoid;
+      }
+
+      textarea,input,select{
+        border:1px solid #bbb;
+        background:var(--white);
+      }
+
+      .score-option label{
+        min-height:48px;
+      }
+
+      @page{
+        size:A4;
+        margin:10mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page-shell">
+    <header class="hero">
+      <img class="main-logo" src="logo.png" alt="Pizza Pilgrims logo placeholder" />
+      <div class="eyebrow">Development Assessment</div>
+      <h1>Ready for Supervisor / Senior Chef</h1>
+      <p class="subtitle">Assessing readiness for the next step through our values, behaviours and practical experience.</p>
+    </header>
+
+    <div class="content">
+      <section class="card">
+        <h2 class="card-title">How to use this assessment</h2>
+        <p class="intro-copy">
+          Score each behaviour from 1–5 using examples you have genuinely observed during normal shifts.
+          Consider how consistently the behaviour is demonstrated, especially during busy or challenging situations.
+          Use the evidence box to describe a specific shift, task, conversation or situation that supports the score.
+        </p>
+        <ul class="readiness-list">
+          <li>Every behaviour must be scored.</li>
+          <li>The overall average must be above 4.0.</li>
+          <li>No individual behaviour can be scored below 3.</li>
+          <li>All practical tasks must be completed.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Our values</h2>
+        <div class="values-row">
+          <div class="value-item">
+            <img src="beyourself.png" alt="Be Yourself value image" />
+            <span>Be Yourself</span>
+          </div>
+          <div class="value-item">
+            <img src="pushyourself.png" alt="Push Yourself value image" />
+            <span>Push Yourself</span>
+          </div>
+          <div class="value-item">
+            <img src="enjoyyourself.png" alt="Enjoy Yourself value image" />
+            <span>Enjoy Yourself</span>
+          </div>
+          <div class="value-item">
+            <img src="respectothers.png" alt="Respect Others value image" />
+            <span>Respect Others</span>
+          </div>
+        </div>
+      </section>
+
+      <form id="assessmentForm">
+        <section class="card">
+          <h2 class="card-title">Assessment details</h2>
+          <div class="details-grid">
+            <div class="field">
+              <label for="teamMember">Team member name</label>
+              <input id="teamMember" name="teamMember" type="text" required />
+            </div>
+
+            <div class="field">
+              <label for="currentRole">Current role</label>
+              <select id="currentRole" name="currentRole" required>
+                <option value="">Select role</option>
+                <option>Waiter</option>
+                <option>Pizza Chef</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="targetRole">Demonstrating readiness for</label>
+              <select id="targetRole" name="targetRole" required>
+                <option value="">Select role</option>
+                <option>Supervisor</option>
+                <option>Senior Chef</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="site">Pizzeria</label>
+              <input id="site" name="site" type="text" required />
+            </div>
+
+            <div class="field">
+              <label for="assessor">Assessor name</label>
+              <input id="assessor" name="assessor" type="text" required />
+            </div>
+
+            <div class="field">
+              <label for="assessmentDate">Assessment date</label>
+              <input id="assessmentDate" name="assessmentDate" type="date" required />
+            </div>
+          </div>
+        </section>
+
+        <div id="behavioursContainer"></div>
+
+        <section class="card">
+          <h2 class="card-title">Practical tasks</h2>
+          <div class="tasks">
+            <div class="task">
+              <input id="taskFoodAudit" name="taskFoodAudit" type="checkbox" />
+              <label for="taskFoodAudit">Conduct an awesome food audit</label>
+            </div>
+            <div class="task">
+              <input id="taskPreshift" name="taskPreshift" type="checkbox" />
+              <label for="taskPreshift">Hold a great mega pre-shift</label>
+            </div>
+            <div class="task">
+              <input id="taskPilgrimage" name="taskPilgrimage" type="checkbox" />
+              <label for="taskPilgrimage">Watch the Pilgrimage course on All Gravy</label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Overall assessment notes</h2>
+          <textarea id="overallNotes" name="overallNotes" placeholder="What is the honest picture? What should the team member focus on next?"></textarea>
+        </section>
+
+        <section class="card">
+          <h2 class="card-title">Assessment outcome</h2>
+
+          <div class="summary-grid">
+            <div class="summary-stat">
+              <strong id="averageScore">–</strong>
+              <span>Average score</span>
+            </div>
+            <div class="summary-stat">
+              <strong id="scoredCount">0/7</strong>
+              <span>Behaviours scored</span>
+            </div>
+            <div class="summary-stat">
+              <strong id="lowestScore">–</strong>
+              <span>Lowest score</span>
+            </div>
+            <div class="summary-stat">
+              <strong id="tasksCount">0/3</strong>
+              <span>Tasks complete</span>
+            </div>
+          </div>
+
+          <div id="outcomeBox" class="outcome incomplete">
+            <strong id="outcomeTitle">Assessment incomplete</strong>
+            <span id="outcomeText">Score every behaviour and complete all practical tasks to see the final result.</span>
+          </div>
+
+          <div id="validationMessage" class="validation-message"></div>
+          <div id="submissionStatus" class="submission-status"></div>
+
+          <p class="small-note">
+            “Above 4” means the exact calculated average must be greater than 4.00. An average of exactly 4.00 does not pass.
+          </p>
+        </section>
+      </form>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-muted" type="button" onclick="resetAssessment()">Reset</button>
+      <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
+      <button class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
+    </div>
+  </main>
+
+  <script>
+    const SCORE_META = {
+      1: "Missed this",
+      2: "Fine tuning",
+      3: "Dough'in good",
+      4: "Smashing it!",
+      5: "Golden Slice"
+    };
+
+    const BEHAVIOURS = [
+      {
+        id: "thrivingUnderPressure",
+        title: "Thriving Under Pressure",
+        description: "Remains calm, organised and effective when service becomes busy, difficult or unpredictable.",
+        great: "Stays positive, prioritises well, protects standards and helps the people around them remain focused.",
+        examples: [
+          "Stays composed during an unexpectedly busy service.",
+          "Reorganises priorities when the shift changes.",
+          "Supports another section without losing control of their own.",
+          "Maintains food, service and safety standards under pressure."
+        ]
+      },
+      {
+        id: "goodCommunicator",
+        title: "Good Communicator",
+        description: "Communicates clearly, confidently and respectfully with both the team and guests.",
+        great: "Shares the right information at the right time, checks understanding and adapts their style to the person or situation.",
+        examples: [
+          "Gives clear direction during service.",
+          "Explains a task and checks it has been understood.",
+          "Communicates delays or problems early.",
+          "Gives constructive and respectful feedback."
+        ]
+      },
+      {
+        id: "takingOwnership",
+        title: "Taking Ownership",
+        description: "Takes responsibility for their area, their decisions and the result of their work.",
+        great: "Notices what needs doing, acts without waiting to be asked and follows tasks through to completion.",
+        examples: [
+          "Solves a problem rather than passing it to someone else.",
+          "Follows up on an issue after the shift.",
+          "Takes responsibility when something has gone wrong.",
+          "Completes an important task independently."
+        ]
+      },
+      {
+        id: "supportiveEmpathetic",
+        title: "Supportive & Empathetic",
+        description: "Recognises when others need help and responds with patience, understanding and practical support.",
+        great: "Listens properly, considers the impact of their actions and adapts their approach to help others succeed.",
+        examples: [
+          "Supports a struggling or nervous team member.",
+          "Listens before responding to a concern.",
+          "Adapts their approach to suit an individual.",
+          "Helps another section during a difficult service."
+        ]
+      },
+      {
+        id: "pizzaPridePassion",
+        title: "Pizza, Pride & Passion",
+        description: "Shows genuine pride in Pizza Pilgrims, our product and the experience we give our guests.",
+        great: "Protects standards, speaks positively about the business and encourages others to care about the details.",
+        examples: [
+          "Refuses to send out a product that does not meet standards.",
+          "Shares product knowledge confidently.",
+          "Improves the presentation or cleanliness of their section.",
+          "Creates excitement around the food, brand or guest experience."
+        ]
+      },
+      {
+        id: "drive",
+        title: "Drive!",
+        description: "Shows energy, ambition and a genuine desire to improve themselves and the team.",
+        great: "Looks for new challenges, acts on feedback and keeps momentum without needing constant encouragement.",
+        examples: [
+          "Asks for feedback and acts on it.",
+          "Volunteers for additional responsibility.",
+          "Works towards a clear development goal.",
+          "Brings energy and focus to difficult or repetitive tasks."
+        ]
+      },
+      {
+        id: "leadingShift",
+        title: "Leading the Shift",
+        description: "Creates structure, direction and positive energy throughout the shift.",
+        great: "Understands the priorities, communicates them clearly and supports the team to deliver a successful service.",
+        examples: [
+          "Leads an engaging and purposeful pre-shift.",
+          "Allocates people and tasks effectively.",
+          "Responds calmly when service does not go to plan.",
+          "Maintains guest experience, standards and team morale."
+        ]
+      }
+    ];
+
+    const GOOGLE_FORM = {
+      actionUrl: "",
+      fields: {
+        teamMember: "",
+        currentRole: "",
+        targetRole: "",
+        site: "",
+        assessor: "",
+        assessmentDate: "",
+        scoresJson: "",
+        evidenceJson: "",
+        practicalTasksJson: "",
+        average: "",
+        lowestScore: "",
+        readinessResult: "",
+        overallNotes: ""
+      }
+    };
+
+    function buildBehaviours(){
+      const container = document.getElementById("behavioursContainer");
+
+      container.innerHTML = BEHAVIOURS.map((behaviour,index) => `
+        <section class="card behaviour-card">
+          <div class="behaviour-head">
+            <span class="behaviour-number">${index + 1}</span>
+            <h2 class="behaviour-title">${behaviour.title}</h2>
+            <p class="behaviour-description">${behaviour.description}</p>
+          </div>
+
+          <div class="great-box">
+            <h3>What great looks like</h3>
+            <p>${behaviour.great}</p>
+            <ul>
+              ${behaviour.examples.map(example => `<li>${example}</li>`).join("")}
+            </ul>
+          </div>
+
+          <div class="score-section">
+            <div class="score-label">Score this behaviour</div>
+            <div class="score-options">
+              ${[1,2,3,4,5].map(score => `
+                <div class="score-option" data-score="${score}">
+                  <input
+                    type="radio"
+                    id="${behaviour.id}_${score}"
+                    name="${behaviour.id}"
+                    value="${score}"
+                    onchange="calculateOutcome()"
+                  />
+                  <label for="${behaviour.id}_${score}">
+                    <strong>${score}</strong>
+                    <span>${SCORE_META[score]}</span>
+                  </label>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+
+          <div class="evidence-wrap">
+            <label for="${behaviour.id}_evidence">Qualitative evidence</label>
+            <p class="evidence-prompt">
+              What did you specifically observe? Describe the shift, task, conversation or situation that supports this score.
+            </p>
+            <textarea
+              id="${behaviour.id}_evidence"
+              name="${behaviour.id}_evidence"
+              placeholder="Record specific evidence here..."
+            ></textarea>
+          </div>
+        </section>
+      `).join("");
+    }
+
+    function getScores(){
+      const scores = {};
+
+      BEHAVIOURS.forEach(behaviour => {
+        const selected = document.querySelector(`input[name="${behaviour.id}"]:checked`);
+        scores[behaviour.id] = selected ? Number(selected.value) : 0;
+      });
+
+      return scores;
+    }
+
+    function getEvidence(){
+      const evidence = {};
+
+      BEHAVIOURS.forEach(behaviour => {
+        evidence[behaviour.id] = document.getElementById(`${behaviour.id}_evidence`).value.trim();
+      });
+
+      return evidence;
+    }
+
+    function getTasks(){
+      return {
+        foodAudit: document.getElementById("taskFoodAudit").checked,
+        megaPreshift: document.getElementById("taskPreshift").checked,
+        pilgrimageCourse: document.getElementById("taskPilgrimage").checked
+      };
+    }
+
+    function calculateOutcome(){
+      const scores = Object.values(getScores()).filter(score => score > 0);
+      const tasks = Object.values(getTasks());
+      const scoredCount = scores.length;
+      const completedTasks = tasks.filter(Boolean).length;
+      const average = scoredCount ? scores.reduce((total,score) => total + score,0) / scoredCount : 0;
+      const lowest = scoredCount ? Math.min(...scores) : 0;
+      const allScored = scoredCount === BEHAVIOURS.length;
+      const allTasks = completedTasks === tasks.length;
+      const ready = allScored && allTasks && average > 4 && lowest >= 3;
+
+      document.getElementById("averageScore").textContent = scoredCount ? average.toFixed(2) : "–";
+      document.getElementById("scoredCount").textContent = `${scoredCount}/${BEHAVIOURS.length}`;
+      document.getElementById("lowestScore").textContent = scoredCount ? lowest : "–";
+      document.getElementById("tasksCount").textContent = `${completedTasks}/${tasks.length}`;
+
+      const box = document.getElementById("outcomeBox");
+      const title = document.getElementById("outcomeTitle");
+      const text = document.getElementById("outcomeText");
+
+      box.className = "outcome";
+
+      if(!allScored || !allTasks){
+        box.classList.add("incomplete");
+        title.textContent = "Assessment incomplete";
+        text.textContent = "Every behaviour must be scored and all three practical tasks must be completed.";
+      } else if(lowest < 3){
+        box.classList.add("development");
+        title.textContent = "Development required";
+        text.textContent = `At least one behaviour is below 3. The lowest recorded score is ${lowest}.`;
+      } else if(average > 4){
+        box.classList.add("ready");
+        title.textContent = "Ready for the next step";
+        text.textContent = `All requirements have been met with an average score of ${average.toFixed(2)}.`;
+      } else {
+        box.classList.add("nearly");
+        title.textContent = "Nearly ready";
+        text.textContent = `All areas are complete, but the average is ${average.toFixed(2)}. It must be above 4.00.`;
+      }
+
+      return {
+        scores:getScores(),
+        evidence:getEvidence(),
+        tasks:getTasks(),
+        average,
+        lowest,
+        allScored,
+        allTasks,
+        ready,
+        result:title.textContent
+      };
+    }
+
+    function validateAssessment(){
+      const form = document.getElementById("assessmentForm");
+      const outcome = calculateOutcome();
+      const message = document.getElementById("validationMessage");
+      const missing = [];
+
+      if(!form.reportValidity()){
+        message.style.display = "block";
+        message.textContent = "Complete all required assessment details before submitting.";
+        return false;
+      }
+
+      if(!outcome.allScored) missing.push("score all behaviours");
+      if(!outcome.allTasks) missing.push("complete all practical tasks");
+
+      if(missing.length){
+        message.style.display = "block";
+        message.textContent = `Please ${missing.join(" and ")} before submitting.`;
+        return false;
+      }
+
+      message.style.display = "none";
+      message.textContent = "";
+      return true;
+    }
+
+    function addHiddenField(form,name,value){
+      if(!name) return;
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+
+    async function submitAssessment(){
+      const status = document.getElementById("submissionStatus");
+      status.textContent = "";
+      status.style.color = "var(--dark-green)";
+
+      if(!validateAssessment()) return;
+
+      const outcome = calculateOutcome();
+
+      if(!GOOGLE_FORM.actionUrl){
+        status.style.color = "var(--orange)";
+        status.textContent = "Google Form submission is not configured yet. Add the form action URL and entry field IDs in the GOOGLE_FORM section of the code.";
+        return;
+      }
+
+      const submissionForm = document.createElement("form");
+      submissionForm.method = "POST";
+      submissionForm.action = GOOGLE_FORM.actionUrl;
+      submissionForm.target = "hiddenSubmitFrame";
+      submissionForm.style.display = "none";
+
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.teamMember, document.getElementById("teamMember").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.currentRole, document.getElementById("currentRole").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.targetRole, document.getElementById("targetRole").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.site, document.getElementById("site").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.assessor, document.getElementById("assessor").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.assessmentDate, document.getElementById("assessmentDate").value);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.scoresJson, JSON.stringify(outcome.scores));
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.evidenceJson, JSON.stringify(outcome.evidence));
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.practicalTasksJson, JSON.stringify(outcome.tasks));
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.average, outcome.average.toFixed(2));
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.lowestScore, String(outcome.lowest));
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.readinessResult, outcome.result);
+      addHiddenField(submissionForm, GOOGLE_FORM.fields.overallNotes, document.getElementById("overallNotes").value);
+
+      document.body.appendChild(submissionForm);
+      submissionForm.submit();
+      submissionForm.remove();
+
+      status.style.color = "var(--bright-green)";
+      status.textContent = "Assessment submitted.";
+    }
+
+    function resetAssessment(){
+      const confirmed = window.confirm("Reset the entire assessment?");
+      if(!confirmed) return;
+
+      document.getElementById("assessmentForm").reset();
+      document.getElementById("submissionStatus").textContent = "";
+      document.getElementById("validationMessage").style.display = "none";
+      setToday();
+      calculateOutcome();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function setToday(){
+      const dateField = document.getElementById("assessmentDate");
+      if(!dateField.value){
+        dateField.value = new Date().toISOString().split("T")[0];
+      }
+    }
+
+    const hiddenFrame = document.createElement("iframe");
+    hiddenFrame.name = "hiddenSubmitFrame";
+    hiddenFrame.style.display = "none";
+    document.body.appendChild(hiddenFrame);
+
+    buildBehaviours();
+    setToday();
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(input => {
+      input.addEventListener("change", calculateOutcome);
+    });
+
+    calculateOutcome();
+  </script>
+</body>
+</html>
