@@ -1088,6 +1088,13 @@ const GOOGLE_FORM = {
       );
 
       addHiddenField(
+    submissionForm,
+    GOOGLE_FORM.fields.assessmentType,
+    document.getElementById("assessmentType").value
+
+);
+
+      addHiddenField(
         submissionForm,
         GOOGLE_FORM.fields.site,
         document.getElementById("site").value
@@ -1105,23 +1112,27 @@ const GOOGLE_FORM = {
         document.getElementById("assessmentDate").value
       );
 
-      addHiddenField(
-        submissionForm,
-        GOOGLE_FORM.fields.scoresJson,
-        JSON.stringify(outcome.scores)
-      );
+   // Submit individual behaviour scores and evidence
 
-      addHiddenField(
-        submissionForm,
-        GOOGLE_FORM.fields.evidenceJson,
-        JSON.stringify(outcome.evidence)
-      );
+BEHAVIOURS.forEach((behaviour, index) => {
 
-      addHiddenField(
+    addHiddenField(
+
         submissionForm,
-        GOOGLE_FORM.fields.practicalTasksJson,
-        JSON.stringify(outcome.tasks)
-      );
+        GOOGLE_FORM.fields.behaviourScores[index],
+        String(outcome.scores[behaviour.id] || "")
+
+    );
+
+    addHiddenField(
+
+        submissionForm,
+        GOOGLE_FORM.fields.behaviourEvidence[index],
+        outcome.evidence[behaviour.id] || ""
+
+    );
+
+});
 
       addHiddenField(
         submissionForm,
