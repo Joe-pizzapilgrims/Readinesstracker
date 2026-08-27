@@ -687,7 +687,7 @@
             </div>
 
             <div class="summary-stat">
-              <strong id="tasksCount">0/3</strong>
+              <strong id="tasksCount">0/6</strong>
               <span>Tasks complete</span>
             </div>
           </div>
@@ -931,13 +931,18 @@ const GOOGLE_FORM = {
       return evidence;
     }
 
-    function getTasks(){
-      return {
-        foodAudit: document.getElementById("taskFoodAudit").checked,
-        megaPreshift: document.getElementById("taskPreshift").checked,
-        pilgrimageCourse: document.getElementById("taskPilgrimage").checked
-      };
-    }
+ function getTasks(){
+
+  return {
+
+    foodAudit: document.getElementById("taskFoodAudit").checked,
+    megaPreshift: document.getElementById("taskPreshift").checked,
+    peakShift: document.getElementById("taskPeakshift").checked,
+    mondayReport: document.getElementById("taskMondayReport").checked,
+    mondayCall: document.getElementById("taskMondaycall").checked,
+    pilgrimageCourse: document.getElementById("taskPilgrimage").checked
+  };
+}
 
     function calculateOutcome(){
       const scores = Object.values(getScores()).filter(score => score > 0);
@@ -975,7 +980,7 @@ const GOOGLE_FORM = {
       if(!allScored || !allTasks){
         box.classList.add("incomplete");
         title.textContent = "Assessment incomplete";
-        text.textContent = "Every behaviour must be scored and all three practical tasks must be completed.";
+        text.textContent = "Every behaviour must be scored and all practical tasks must be completed.";
       } else if(lowest < 3){
         box.classList.add("development");
         title.textContent = "Development required";
