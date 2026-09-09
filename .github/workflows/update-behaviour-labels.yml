@@ -17,7 +17,7 @@ jobs:
         with:
           ref: main
 
-      - name: Update visible behaviour labels
+      - name: Correct Curiosity spelling
         shell: python
         run: |
           from pathlib import Path
@@ -28,30 +28,17 @@ jobs:
               Path('general-manager-head-chef.html'),
           ]
 
-          replacements = {
-              'title: "Thriving Under Pressure"': 'title: "Thriving under pressure"',
-              'title: "Taking Ownership"': 'title: "Taking ownership"',
-              'title: "Good Communicator"': 'title: "Good communicator"',
-              'title: "Supportive & Empathetic"': 'title: "Cares for people"',
-              'title: "Pizza, Pride & Passion"': 'title: "Pride & Passion"',
-              'title: "Drive!"': 'title: "Curiousity and drive"',
-              'title: "Find Your Drive"': 'title: "Curiousity and drive"',
-              'title: "Find your drive"': 'title: "Curiousity and drive"',
-          }
-
           for path in files:
               text = path.read_text(encoding='utf-8')
-              original = text
-              for old, new in replacements.items():
-                  text = text.replace(old, new)
-              if text == original:
-                  raise RuntimeError(f'No behaviour labels changed in {path}')
-              path.write_text(text, encoding='utf-8')
+              updated = text.replace('title: "Curiousity and drive"', 'title: "Curiosity and drive"')
+              if updated == text:
+                  raise RuntimeError(f'Curiousity label not found in {path}')
+              path.write_text(updated, encoding='utf-8')
 
-      - name: Commit label changes
+      - name: Commit spelling correction
         run: |
           git config user.name "OpenAI ChatGPT"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add ready-for-supervisor-senior-chef.html assistant-manager-second-chef.html general-manager-head-chef.html
-          git commit -m "Standardise development tracker behaviour labels"
+          git commit -m "Correct Curiosity spelling"
           git push origin main
