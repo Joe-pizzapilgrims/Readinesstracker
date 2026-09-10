@@ -709,7 +709,7 @@
 
     <div class="actions">
       <button class="btn btn-muted" type="button" onclick="resetAssessment()">Reset</button>
-      <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
+      <button class="btn btn-secondary" type="button" onclick="window.print()">Download Assessment (Save / Print as PDF)</button>
       <button class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
     </div>
   </main>
@@ -733,7 +733,9 @@
           "Takes control of a difficult service and resets priorities clearly.",
           "Moves people or resources to support the areas under the most pressure.",
           "Makes timely decisions without creating panic or confusion.",
-          "Protects food, service, safety and people standards during challenging shifts."
+          "Protects food, service, safety and people standards during challenging shifts.",
+          "Keeps guests informed calmly and clearly when waits increase or something goes wrong during a busy service.",
+          "Protects the welcome, pace and quality of the guest experience even when the team is under pressure."
         ]
       },
       {
@@ -1119,23 +1121,19 @@ const GOOGLE_FORM = {
         document.getElementById("assessmentDate").value
       );
 
-      addHiddenField(
-        submissionForm,
-        GOOGLE_FORM.fields.scoresJson,
-        JSON.stringify(outcome.scores)
-      );
-
-      addHiddenField(
-        submissionForm,
-        GOOGLE_FORM.fields.evidenceJson,
-        JSON.stringify(outcome.evidence)
-      );
-
-      addHiddenField(
-        submissionForm,
-        GOOGLE_FORM.fields.practicalTasksJson,
-        JSON.stringify(outcome.tasks)
-      );
+      // Submit individual behaviour scores and evidence in the background
+      BEHAVIOURS.forEach((behaviour, index) => {
+        addHiddenField(
+          submissionForm,
+          GOOGLE_FORM.fields.behaviourScores[index],
+          String(outcome.scores[behaviour.id] || "")
+        );
+        addHiddenField(
+          submissionForm,
+          GOOGLE_FORM.fields.behaviourEvidence[index],
+          outcome.evidence[behaviour.id] || ""
+        );
+      });
 
       addHiddenField(
         submissionForm,
@@ -1168,6 +1166,25 @@ const GOOGLE_FORM = {
       status.style.color = "var(--bright-green)";
       status.textContent = "Assessment submitted.";
     }
+
+    const printTextareaHeights = new Map();
+
+    window.addEventListener("beforeprint", () => {
+      document.querySelectorAll("textarea").forEach(textarea => {
+        printTextareaHeights.set(textarea, textarea.style.height);
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.overflow = "visible";
+      });
+    });
+
+    window.addEventListener("afterprint", () => {
+      document.querySelectorAll("textarea").forEach(textarea => {
+        textarea.style.height = printTextareaHeights.get(textarea) || "";
+        textarea.style.overflow = "";
+      });
+      printTextareaHeights.clear();
+    });
 
     function resetAssessment(){
       const confirmed = window.confirm("Reset the entire assessment?");

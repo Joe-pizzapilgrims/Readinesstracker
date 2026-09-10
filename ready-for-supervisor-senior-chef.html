@@ -682,7 +682,7 @@
 
     <div class="actions">
       <button class="btn btn-muted" type="button" onclick="resetAssessment()">Reset</button>
-      <button class="btn btn-secondary" type="button" onclick="window.print()">Save as PDF</button>
+      <button class="btn btn-secondary" type="button" onclick="window.print()">Download Assessment (Save / Print as PDF)</button>
       <button class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
     </div>
   </main>
@@ -706,7 +706,9 @@
           "Stays composed during an unexpectedly busy service.",
           "Reorganises the team when the shift changes.",
           "Supports another section without losing control of their own.",
-          "Maintains pizza quality, service and safety standards during busy peak shifts."
+          "Maintains pizza quality, service and safety standards during busy peak shifts.",
+          "Keeps guests informed calmly and clearly when waits increase or something goes wrong during a busy service.",
+          "Protects the welcome, pace and quality of the guest experience even when the team is under pressure."
         ]
       },
       {
@@ -1058,6 +1060,25 @@ BEHAVIOURS.forEach((behaviour, index) => {
       status.style.color = "var(--bright-green)";
       status.textContent = "Assessment submitted.";
     }
+
+    const printTextareaHeights = new Map();
+
+    window.addEventListener("beforeprint", () => {
+      document.querySelectorAll("textarea").forEach(textarea => {
+        printTextareaHeights.set(textarea, textarea.style.height);
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.overflow = "visible";
+      });
+    });
+
+    window.addEventListener("afterprint", () => {
+      document.querySelectorAll("textarea").forEach(textarea => {
+        textarea.style.height = printTextareaHeights.get(textarea) || "";
+        textarea.style.overflow = "";
+      });
+      printTextareaHeights.clear();
+    });
 
     function resetAssessment(){
       const confirmed = window.confirm("Reset the entire assessment?");
