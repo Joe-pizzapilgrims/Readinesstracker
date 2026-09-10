@@ -1,0 +1,82 @@
+name: Apply development tracker feedback batch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/tracker-feedback-batch.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-trackers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Apply tracker improvements
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          files = [
+              Path('ready-for-supervisor-senior-chef.html'),
+              Path('assistant-manager-second-chef.html'),
+              Path('general-manager-head-chef.html'),
+          ]
+
+          guest_examples = [
+              'Keeps guests informed calmly and clearly when waits increase or something goes wrong during a busy service.',
+              'Protects the welcome, pace and quality of the guest experience even when the team is under pressure.'
+          ]
+
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              original = text
+
+              # #3: make the intended order/action explicit to users.
+              text = text.replace('>Save as PDF</button>', '>Download Assessment (Save / Print as PDF)</button>')
+
+              # #5: expand all textareas to their full content before printing, then restore afterwards.
+              marker = '    function resetAssessment(){'
+              print_js = '''    const printTextareaHeights = new Map();\n\n    window.addEventListener("beforeprint", () => {\n      document.querySelectorAll("textarea").forEach(textarea => {\n        printTextareaHeights.set(textarea, textarea.style.height);\n        textarea.style.height = "auto";\n        textarea.style.height = `${textarea.scrollHeight}px`;\n        textarea.style.overflow = "visible";\n      });\n    });\n\n    window.addEventListener("afterprint", () => {\n      document.querySelectorAll("textarea").forEach(textarea => {\n        textarea.style.height = printTextareaHeights.get(textarea) || "";\n        textarea.style.overflow = "";\n      });\n      printTextareaHeights.clear();\n    });\n\n'''
+              if 'printTextareaHeights' not in text and marker in text:
+                  text = text.replace(marker, print_js + marker, 1)
+
+              # #6: add guest-facing examples to Thriving under pressure.
+              if guest_examples[0] not in text:
+                  m = re.search(r'(id:\s*"thrivingUnderPressure".*?examples:\s*\[)(.*?)(\]\s*\n\s*\})', text, re.S)
+                  if not m:
+                      raise RuntimeError(f'Could not locate Thriving under pressure examples in {path}')
+                  body = m.group(2).rstrip()
+                  comma = ',' if body.strip() and not body.rstrip().endswith(',') else ''
+                  additions = ''.join(f'\n          "{x}",' for x in guest_examples).rstrip(',')
+                  new_body = body + comma + additions + '\n        '
+                  text = text[:m.start(2)] + new_body + text[m.end(2):]
+
+              # #2/#4: GM/HC was using undefined aggregate form field mappings.
+              if path.name == 'general-manager-head-chef.html':
+                  pattern = re.compile(r'''\s*addHiddenField\(\s*submissionForm,\s*GOOGLE_FORM\.fields\.scoresJson,\s*JSON\.stringify\(outcome\.scores\)\s*\);\s*addHiddenField\(\s*submissionForm,\s*GOOGLE_FORM\.fields\.evidenceJson,\s*JSON\.stringify\(outcome\.evidence\)\s*\);\s*addHiddenField\(\s*submissionForm,\s*GOOGLE_FORM\.fields\.practicalTasksJson,\s*JSON\.stringify\(outcome\.tasks\)\s*\);''', re.S)
+                  replacement = '''\n\n      // Submit individual behaviour scores and evidence in the background\n      BEHAVIOURS.forEach((behaviour, index) => {\n        addHiddenField(\n          submissionForm,\n          GOOGLE_FORM.fields.behaviourScores[index],\n          String(outcome.scores[behaviour.id] || "")\n        );\n        addHiddenField(\n          submissionForm,\n          GOOGLE_FORM.fields.behaviourEvidence[index],\n          outcome.evidence[behaviour.id] || ""\n        );\n      });'''
+                  text, count = pattern.subn(replacement, text, count=1)
+                  if count != 1:
+                      raise RuntimeError('Could not replace GM/HC broken submission fields')
+
+              # #4: all versions should explicitly post into the hidden frame, never navigate away.
+              if 'submissionForm.target = "hiddenSubmitFrame";' not in text:
+                  raise RuntimeError(f'Background submission target missing in {path}')
+
+              if text == original:
+                  raise RuntimeError(f'No changes made to {path}')
+              path.write_text(text, encoding='utf-8')
+
+      - name: Commit tracker improvements
+        run: |
+          git config user.name "OpenAI ChatGPT"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ready-for-supervisor-senior-chef.html assistant-manager-second-chef.html general-manager-head-chef.html
+          git commit -m "Apply development tracker feedback 2 to 6"
+          git push origin main
