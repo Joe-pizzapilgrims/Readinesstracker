@@ -404,7 +404,7 @@
 
     .outcome.ready{background:var(--bright-green);color:var(--dark-green)}
     .outcome.development{background:var(--red)}
-    .outcome.nearly{background:var(--orange)}
+    .outcome.nearly{background:var(--orange);color:var(--ink)}
     .outcome.incomplete{background:var(--dark-green)}
 
     .outcome strong{
@@ -465,6 +465,20 @@
       font-size:.82rem;
       font-weight:800;
     }
+
+
+    .submission-confirmation{
+      grid-column:1 / -1;
+      padding:16px;
+      border:2px solid var(--dark-green);
+      border-radius:12px;
+      background:#EEF7F1;
+      color:var(--dark-green);
+      line-height:1.45;
+    }
+    .submission-confirmation:empty{display:none}
+    .submission-confirmation strong{display:block;font-size:1.1rem;margin-bottom:4px}
+    .btn:disabled{cursor:default;opacity:.8;transform:none}
 
     @media (max-width:700px){
       .content{padding:12px}
@@ -545,10 +559,9 @@
           Use the evidence box to describe a specific shift, task, conversation or situation that supports the score.
         </p>
         <ul class="readiness-list">
-          <li>Every behaviour must be scored.</li>
-          <li>The overall average must be above 4.0.</li>
-          <li>No individual behaviour can be scored below 3.</li>
-          <li>All six practical tasks must be completed.</li>
+          <li>To submit: complete the assessment details and score every behaviour.</li>
+          <li>You can submit to record progress even when scores are below the readiness requirements or practical tasks are unfinished.</li>
+          <li>To achieve readiness: the overall average must be above 4.0, no behaviour can be below 3, and all practical tasks must be completed.</li>
         </ul>
       </section>
 
@@ -694,7 +707,7 @@
 
           <div id="outcomeBox" class="outcome incomplete">
             <strong id="outcomeTitle">Assessment incomplete</strong>
-            <span id="outcomeText">Score every behaviour and complete all practical tasks to see the final result.</span>
+            <span id="outcomeText">Score every behaviour to see the current outcome. You can submit with practical tasks still in progress.</span>
           </div>
 
           <div id="validationMessage" class="validation-message"></div>
@@ -708,9 +721,10 @@
     </div>
 
     <div class="actions">
+      <div id="submissionConfirmation" class="submission-confirmation" role="status" aria-live="polite" aria-atomic="true"></div>
       <button class="btn btn-muted" type="button" onclick="resetAssessment()">Reset</button>
       <button class="btn btn-secondary" type="button" onclick="window.print()">Download Assessment (Save / Print as PDF)</button>
-      <button class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
+      <button id="submitAssessmentButton" class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
     </div>
   </main>
 
@@ -988,22 +1002,29 @@ const GOOGLE_FORM = {
 
       box.className = "outcome";
 
-      if(!allScored || !allTasks){
+      if(!allScored){
         box.classList.add("incomplete");
         title.textContent = "Assessment incomplete";
-        text.textContent = "Every behaviour must be scored and all six practical tasks must be completed.";
-      } else if(lowest < 3){
-        box.classList.add("development");
-        title.textContent = "Development required";
-        text.textContent = `At least one behaviour is below 3. The lowest recorded score is ${lowest}.`;
-      } else if(average > 4){
+        text.textContent = "Score every behaviour and complete the assessment details before submitting. Practical tasks can still be in progress.";
+      } else if(ready){
         box.classList.add("ready");
         title.textContent = "Ready for the next step";
         text.textContent = `All requirements have been met with an average score of ${average.toFixed(2)}.`;
       } else {
         box.classList.add("nearly");
-        title.textContent = "Nearly ready";
-        text.textContent = `All areas are complete, but the average is ${average.toFixed(2)}. It must be above 4.00.`;
+        title.textContent = "Not quite there yet";
+        const nextSteps = [];
+        if(!allTasks){
+          const remaining = tasks.length - completedTasks;
+          nextSteps.push(`complete ${remaining} remaining practical task${remaining === 1 ? "" : "s"}`);
+        }
+        if(lowest < 3){
+          nextSteps.push("bring every behaviour score to at least 3");
+        }
+        if(average <= 4){
+          nextSteps.push(`raise the average above 4.00 (currently ${average.toFixed(2)})`);
+        }
+        text.textContent = `You can submit this assessment to record progress once the assessment details are filled in. Readiness has not yet been achieved. Next steps: ${nextSteps.join("; ")}.`;
       }
 
       return {
@@ -1035,10 +1056,6 @@ const GOOGLE_FORM = {
         missing.push("score all behaviours");
       }
 
-      if(!outcome.allTasks){
-        missing.push("complete all practical tasks");
-      }
-
       if(missing.length){
         message.style.display = "block";
         message.textContent = `Please ${missing.join(" and ")} before submitting.`;
@@ -1062,7 +1079,33 @@ const GOOGLE_FORM = {
       form.appendChild(input);
     }
 
+
+    let assessmentSubmitted = false;
+
+    function clearSubmissionConfirmation(){
+      assessmentSubmitted = false;
+      document.getElementById("submissionConfirmation").replaceChildren();
+      document.getElementById("submissionStatus").textContent = "";
+      const button = document.getElementById("submitAssessmentButton");
+      button.disabled = false;
+      button.textContent = "Submit Assessment";
+    }
+
+    function showSubmissionConfirmation(){
+      assessmentSubmitted = true;
+      const confirmation = document.getElementById("submissionConfirmation");
+      const title = document.createElement("strong");
+      title.textContent = "✓ Assessment submitted";
+      const message = document.createElement("span");
+      message.textContent = "Thank you — you've submitted this assessment to record progress. Your readiness outcome is shown above. You can download a copy for your records.";
+      confirmation.replaceChildren(title, message);
+      const button = document.getElementById("submitAssessmentButton");
+      button.textContent = "✓ Submitted";
+      button.disabled = true;
+    }
+
     async function submitAssessment(){
+      if(assessmentSubmitted) return;
       const status = document.getElementById("submissionStatus");
 
       status.textContent = "";
@@ -1163,8 +1206,7 @@ const GOOGLE_FORM = {
       submissionForm.submit();
       submissionForm.remove();
 
-      status.style.color = "var(--bright-green)";
-      status.textContent = "Assessment submitted.";
+      showSubmissionConfirmation();
     }
 
     const printTextareaHeights = new Map();
@@ -1192,6 +1234,7 @@ const GOOGLE_FORM = {
       if(!confirmed) return;
 
       document.getElementById("assessmentForm").reset();
+      clearSubmissionConfirmation();
       document.getElementById("submissionStatus").textContent = "";
       document.getElementById("validationMessage").style.display = "none";
 
@@ -1218,6 +1261,9 @@ const GOOGLE_FORM = {
     hiddenFrame.style.display = "none";
 
     document.body.appendChild(hiddenFrame);
+
+    document.getElementById("assessmentForm").addEventListener("input", clearSubmissionConfirmation);
+    document.getElementById("assessmentForm").addEventListener("change", clearSubmissionConfirmation);
 
     buildBehaviours();
     setToday();
