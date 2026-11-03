@@ -466,6 +466,20 @@
       font-weight:800;
     }
 
+
+    .submission-confirmation{
+      grid-column:1 / -1;
+      padding:16px;
+      border:2px solid var(--dark-green);
+      border-radius:12px;
+      background:#EEF7F1;
+      color:var(--dark-green);
+      line-height:1.45;
+    }
+    .submission-confirmation:empty{display:none}
+    .submission-confirmation strong{display:block;font-size:1.1rem;margin-bottom:4px}
+    .btn:disabled{cursor:default;opacity:.8;transform:none}
+
     @media (max-width:700px){
       .content{padding:12px}
       .card{padding:14px}
@@ -681,9 +695,10 @@
     </div>
 
     <div class="actions">
+      <div id="submissionConfirmation" class="submission-confirmation" role="status" aria-live="polite" aria-atomic="true"></div>
       <button class="btn btn-muted" type="button" onclick="resetAssessment()">Reset</button>
       <button class="btn btn-secondary" type="button" onclick="window.print()">Download Assessment (Save / Print as PDF)</button>
-      <button class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
+      <button id="submitAssessmentButton" class="btn btn-primary" type="button" onclick="submitAssessment()">Submit Assessment</button>
     </div>
   </main>
 
@@ -998,7 +1013,33 @@ const GOOGLE_FORM = {
       form.appendChild(input);
     }
 
+
+    let assessmentSubmitted = false;
+
+    function clearSubmissionConfirmation(){
+      assessmentSubmitted = false;
+      document.getElementById("submissionConfirmation").replaceChildren();
+      document.getElementById("submissionStatus").textContent = "";
+      const button = document.getElementById("submitAssessmentButton");
+      button.disabled = false;
+      button.textContent = "Submit Assessment";
+    }
+
+    function showSubmissionConfirmation(){
+      assessmentSubmitted = true;
+      const confirmation = document.getElementById("submissionConfirmation");
+      const title = document.createElement("strong");
+      title.textContent = "✓ Assessment submitted";
+      const message = document.createElement("span");
+      message.textContent = "Thank you — you've completed this assessment and sent it to Google Forms. You can now download a copy for your records.";
+      confirmation.replaceChildren(title, message);
+      const button = document.getElementById("submitAssessmentButton");
+      button.textContent = "✓ Submitted";
+      button.disabled = true;
+    }
+
     async function submitAssessment(){
+      if(assessmentSubmitted) return;
       const status = document.getElementById("submissionStatus");
       status.textContent = "";
       status.style.color = "var(--dark-green)";
@@ -1057,8 +1098,7 @@ BEHAVIOURS.forEach((behaviour, index) => {
       submissionForm.submit();
       submissionForm.remove();
 
-      status.style.color = "var(--bright-green)";
-      status.textContent = "Assessment submitted.";
+      showSubmissionConfirmation();
     }
 
     const printTextareaHeights = new Map();
@@ -1085,6 +1125,7 @@ BEHAVIOURS.forEach((behaviour, index) => {
       if(!confirmed) return;
 
       document.getElementById("assessmentForm").reset();
+      clearSubmissionConfirmation();
       document.getElementById("submissionStatus").textContent = "";
       document.getElementById("validationMessage").style.display = "none";
       setToday();
@@ -1103,6 +1144,9 @@ BEHAVIOURS.forEach((behaviour, index) => {
     hiddenFrame.name = "hiddenSubmitFrame";
     hiddenFrame.style.display = "none";
     document.body.appendChild(hiddenFrame);
+
+    document.getElementById("assessmentForm").addEventListener("input", clearSubmissionConfirmation);
+    document.getElementById("assessmentForm").addEventListener("change", clearSubmissionConfirmation);
 
     buildBehaviours();
     setToday();
