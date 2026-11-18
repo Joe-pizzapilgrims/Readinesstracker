@@ -470,13 +470,15 @@
     .submission-confirmation{
       grid-column:1 / -1;
       padding:16px;
-      border:2px solid var(--dark-green);
+      border:2px solid #174571;
       border-radius:12px;
-      background:#EEF7F1;
-      color:var(--dark-green);
+      background:#eaf4ff;
+      color:#174571;
       line-height:1.45;
     }
-    .submission-confirmation:empty{display:none}
+    .submission-confirmation:empty{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0;border:0}
+    .actions:has(.submission-confirmation:not(:empty)){background:#eaf4ff;border-color:#245583}
+    .actions:has(.submission-confirmation:not(:empty)) .btn-primary{background:#194d7e;color:white;opacity:1}
     .submission-confirmation strong{display:block;font-size:1.1rem;margin-bottom:4px}
     .btn:disabled{cursor:default;opacity:.8;transform:none}
 
@@ -1078,8 +1080,10 @@ const GOOGLE_FORM = {
 
 
     let assessmentSubmitted = false;
+    let confirmationTimer;
 
     function clearSubmissionConfirmation(){
+      clearTimeout(confirmationTimer);
       assessmentSubmitted = false;
       document.getElementById("submissionConfirmation").replaceChildren();
       document.getElementById("submissionStatus").textContent = "";
@@ -1092,12 +1096,12 @@ const GOOGLE_FORM = {
       assessmentSubmitted = true;
       const confirmation = document.getElementById("submissionConfirmation");
       const title = document.createElement("strong");
-      title.textContent = "✓ Assessment submitted";
+      title.textContent = "✓ Assessment sent to Google Forms";
       const message = document.createElement("span");
-      message.textContent = "Thank you — you've submitted this assessment to record progress. Your readiness outcome is shown above. You can download a copy for your records.";
+      message.textContent = "You can download a copy for your records or close this page.";
       confirmation.replaceChildren(title, message);
       const button = document.getElementById("submitAssessmentButton");
-      button.textContent = "✓ Submitted";
+      button.textContent = "✓ Sent";
       button.disabled = true;
     }
 
@@ -1215,10 +1219,20 @@ BEHAVIOURS.forEach((behaviour, index) => {
       );
 
       document.body.appendChild(submissionForm);
-      submissionForm.submit();
-      submissionForm.remove();
+      assessmentSubmitted = true;
+      const button = document.getElementById("submitAssessmentButton");
+      button.disabled = true;
+      button.textContent = "Sending…";
 
-      showSubmissionConfirmation();
+      try {
+        submissionForm.submit();
+        confirmationTimer = setTimeout(showSubmissionConfirmation, 350);
+      } catch {
+        clearSubmissionConfirmation();
+        status.textContent = "The assessment could not be sent. Please try again.";
+      } finally {
+        submissionForm.remove();
+      }
     }
 
     const printTextareaHeights = new Map();
